@@ -26,7 +26,7 @@ ui <- fluidPage(
                
                selectInput(inputId = "choose", label = "Choose a value among:",
                            choices = list("Percent White","Percent Black","Percent Asian", "Percent Hispanic"),
-                           selected = "Percent Black"
+                           selected = "Percent White"
                ),
                
                br(),
@@ -76,7 +76,7 @@ server <- function(input, output) {
 
     output$counties <- renderTable({
         
-        counties()
+        head(counties())
         
     })
 
