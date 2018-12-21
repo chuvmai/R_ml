@@ -2,6 +2,7 @@ library(shiny)
 library(maps)
 library(mapproj)
 library(dplyr)
+library(fBasics)
 
 source("helpers.R")
 
@@ -54,6 +55,8 @@ ui <- fluidPage(
            
            h3("Output"),
            
+           hr(),
+           
            tabsetPanel(type = "tabs",
                        
                        tabPanel("County plot", plotOutput("countyPlot")),
@@ -68,9 +71,24 @@ ui <- fluidPage(
                                 
                                 ),
                        
-                       tabPanel("Summary", verbatimTextOutput("summary")),
+                       tabPanel("Summary", 
+                                
+                                # tableOutput("summary")
+                                # textOutput("summary")
+                                verbatimTextOutput("summary")
+                                
+                                ),
                        
-                       tabPanel("Table", tableOutput("counties"))
+                       tabPanel("Table", 
+                                
+                                h4("Head"),
+                                
+                                tableOutput("countieshead"),
+                                
+                                h4("Tail"),
+                                
+                                tableOutput("countiestail")
+                                )
            
            )
     )
@@ -100,7 +118,7 @@ server <- function(input, output) {
   })
   
   
-  output$counties <- renderTable({
+  output$countieshead <- renderTable({
     
     req(input$file)
       
@@ -108,11 +126,27 @@ server <- function(input, output) {
     
   })
   
-  output$summary <- renderPrint({
+  output$countiestail <- renderTable({
       
       req(input$file)
       
-      summary( counties() )
+      tail(counties())
+      
+  })
+  
+  # output$summary <- renderTable({
+  # 
+  #     req(input$file)
+  # 
+  #     return( summary( counties()[,2:6] ) )
+  # 
+  # })
+  
+  output$summary <- renderPrint({
+
+      req(input$file)
+
+      summary( counties()[,2:6] ) 
   })
   
   
